@@ -16,6 +16,7 @@
             # icpc language standards
             gcc13
             pypy3
+            jdk21
           ];
         };
       }
