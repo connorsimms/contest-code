@@ -6,11 +6,3 @@ int main() {
   cin >> a >> b >> c;
   cout << max(c - b, b - a) - 1 << '\n';
 }
-
-// xx.x
-// .xxx
-//
-// x.x...x
-// ..x..xx
-// ..xx.x.
-// ...xxx.
