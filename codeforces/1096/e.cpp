@@ -33,9 +33,8 @@ int main() {
       }
     }
 
-    if (remId != -1) {
+    if (remId != -1)
       ans += mxNum;
-    }
 
     cout << ans << '\n';
   }
