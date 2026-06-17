@@ -66,6 +66,7 @@
             pypy3
             jdk21
             icdiff
+            clang-tools
 
             script_cpp_compile
             script_cpp_debug
