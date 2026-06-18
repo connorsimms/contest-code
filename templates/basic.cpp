@@ -22,15 +22,17 @@ template <class T, class U> void chmax(T &l, const U &r) { l = l < r ? r : l; }
 template <class T, class U> void chmin(T &l, const U &r) { l = l > r ? r : l; }
 
 template <class A, class B> ostream &operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
-template <class TC, class T = class enable_if<!is_same<TC, std::string>::value, class TC::value_type>::type> std::ostream &operator<<(std::ostream &os, const TC &v) { os << '{'; std::string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; } 
+template <class TC> auto operator<<(ostream &os, const TC &v) -> enable_if_t<!is_convertible_v<TC, string_view>, decltype(begin(v), os)> { os << '{'; str sep; for (const auto &x : v) os << sep << x, sep = ", "; return os << '}'; } 
 
 void dbg_out() { std::cerr << endl; }
-
 template <class H, class... T> void dbg_out(H h, T... t) { std::cerr << ' ' << h; dbg_out(t...); }
-template <class T> T dbg_exp(const char *func, int line, string_view str, T &&expr) { std::cerr << "\033[33m[" << func << ":" << line << "]\033[0m \033[34m[" << str << "]:\033[0m " << expr << '\n'; return expr; }
+
+constexpr const char *C_ORG = "\033[38;2;235;176;99m", *C_BLU = "\033[38;2;163;169;206m", *C_RED = "\033[38;2;212;119;102m", *C_RST = "\033[0m";
+
+template <class T> T dbg_exp(const char *func, int line, string_view string, T &&expr) { cerr << C_ORG << "[" << func << ":" << line << "]" << C_RST << " " << C_BLU << "[" << string << "]:" << C_RST << " " << expr << '\n'; return expr; }
 
 #ifdef DEBUG
-#define dbg(...) cerr << "\033[33m[" << __FUNCTION__ << ":" << __LINE__ << "]\033[0m \033[31m[" << #__VA_ARGS__ << "]:\033[0m", dbg_out(__VA_ARGS__)
+#define dbg(...) cerr << C_ORG << "[" << __FUNCTION__ << ":" << __LINE__ << "]" << C_RST << " " << C_RED << "[" << #__VA_ARGS__ << "]:" << C_RST, dbg_out(__VA_ARGS__)
 #define dbge(x) (dbg_exp(__FUNCTION__, __LINE__, #x, x))
 #else
 #define dbg(...)
@@ -38,15 +40,34 @@ template <class T> T dbg_exp(const char *func, int line, string_view str, T &&ex
 #endif
 // clang-format on
 
-void gen(int seed) { srand(seed); }
+int rnd(int a, int b) { return (rand() % (b - a + 1)) + a; }
+
+void gen(int seed) {
+    srand(seed);
+    int tc = rnd(1, 10);
+    cout << tc << '\n';
+}
 
 void brute(int TC) {}
 
 void solve(int TC) {}
 
-int main() {
+int main(int argc, char *argv[]) {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+
+    if (argc > 1) {
+        string mode(argv[1]);
+        if (mode == "brute") {
+            int TC;
+            cin >> TC;
+            for (int i = 1; i <= TC; ++i)
+                brute(i);
+        } else if (mode == "gen") {
+            gen(atoi(argv[2]));
+        }
+        return 0;
+    }
 
     int TC;
     cin >> TC;
