@@ -10,20 +10,20 @@
       let
         pkgs = import nixpkgs { inherit system; };
 
-        c_universal_flags = "-std=c++2b -Wall -Wextra -Wshadow -Wno-sign-conversion";
+        c_universal_flags = "-DLOCAL -std=c++2b -Wall -Wextra -Wshadow -Wno-sign-conversion";
         c_debug_flags = "-DDEBUG -D_GLIBCXX_ASSERTIONS -fsanitize=address,undefined -g -ggdb3";
         c_heavy_debug_flags = "-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC";
 
         script_cpp_compile = pkgs.writeShellScriptBin "c" ''
-          g++ ${c_universal_flags} -O2 "$1.cpp" -o "$1"
+          g++ ${c_universal_flags} -I"$DIR/include" -O2 "$1.cpp" -o "$1"
         '';
 
         script_cpp_debug = pkgs.writeShellScriptBin "d" ''
-          g++ ${c_universal_flags} ${c_debug_flags} "$1.cpp" -O0 -o "$1"
+          g++ ${c_universal_flags} ${c_debug_flags} -I"$DIR/include" "$1.cpp" -O0 -o "$1"
         '';
 
         script_cpp_debug_heavy = pkgs.writeShellScriptBin "dh" ''
-          g++ ${c_universal_flags} ${c_debug_flags} ${c_heavy_debug_flags} "$1.cpp" -O0 -o "$1"
+          g++ ${c_universal_flags} ${c_debug_flags} ${c_heavy_debug_flags} -I"$DIR/include" "$1.cpp" -O0 -o "$1"
         '';
 
         script_cpp_run = pkgs.writeShellScriptBin "cr" ''
@@ -75,6 +75,10 @@
             script_cpp_run_debug
             script_stress
           ];
+
+          shellHook = ''
+            export DIR=$PWD
+          '';
         };
       }
     );
