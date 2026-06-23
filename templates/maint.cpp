@@ -17,7 +17,7 @@ template <class T> using VV = V<V<T>>;
 template <class T> using PQ = priority_queue<T>;
 template <class T> using PQG = priority_queue<T, vector<T>, greater<T>>;
 template <class T, class U = T> using P = pair<T, U>;
-template <class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <class T> using OST = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 template <class T, class U> bool chmax(T &l, const U &r) { return (l < r) ? l = r, 1 : 0;}
 template <class T, class U> bool chmin(T &l, const U &r) { return (l > r) ? l = r, 1 : 0;}
@@ -59,7 +59,6 @@ void gen(int seed) {
 int main(int argc, char *argv[]) {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    cout.tie(nullptr);
 
     RUN_TESTS();
 
