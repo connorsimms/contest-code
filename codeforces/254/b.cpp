@@ -33,10 +33,8 @@ int main() {
         join(a, b);
     }
 
-    set<int> s;
     for (int i{1}; i <= n; ++i) {
         find(find, i);
-        s.insert(p[i]);
     }
 
     cout << (1LL << (n - numSets)) << '\n';
