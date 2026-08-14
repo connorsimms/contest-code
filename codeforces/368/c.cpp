@@ -3,10 +3,6 @@ using namespace std;
 using ll = long long;
 using ull = unsigned long long;
 
-// a^2 + b^2 = c^2
-// a^2 = c^2 - b^2
-// a^2 = (c - b)(c + b)
-// 3, 4, 5, 6, 7 (24, 25), 8, 9, 10, 11 (60, 61), 12, 13 (
 int main() {
     ull n;
     cin >> n;
