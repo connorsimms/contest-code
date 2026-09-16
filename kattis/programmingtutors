@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+using ll = long long;
+
+constexpr ll INF = 1e9;
+
+int main() {
+  int N;
+  cin >> N;
+
+  vector<pair<ll, ll>> s(N), t(N);
+
+  for (int i{}; i < N; ++i) {
+    cin >> s[i].first >> s[i].second;
+  }
+
+  for (int i{}; i < N; ++i) {
+    cin >> t[i].first >> t[i].second;
+  }
+
+  ll lo = 0, hi = 1e9;
+
+  auto find = [&](auto &&rec, int j, vector<vector<int>> &grid,
+                  vector<int> &btoa, vector<bool> &vis) {
+    if (btoa[j] == -1)
+      return true;
+
+    vis[j] = true;
+    int di = btoa[j];
+    for (int e : grid[di]) {
+      if (!vis[e] && rec(rec, e, grid, btoa, vis)) {
+        btoa[e] = di;
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  auto match = [&](vector<vector<int>> &grid, vector<int> &btoa) {
+    vector<bool> vis(btoa.size());
+
+    for (int i{}; i < grid.size(); ++i) {
+      vis.assign(btoa.size(), false);
+
+      for (auto j : grid[i]) {
+        if (find(find, j, grid, btoa, vis)) {
+          btoa[j] = i;
+          break;
+        }
+      }
+    }
+
+    int cnt = 0;
+    for (auto x : btoa) {
+      if (x == -1)
+        ++cnt;
+    }
+
+    return btoa.size() - cnt;
+  };
+
+  auto check = [&](ll lim) -> bool {
+    vector<vector<int>> grid(N);
+    vector<int> btoa(N, -1);
+
+    for (int i{}; i < N; ++i) {
+      auto [sx, sy] = s[i];
+      for (int j{}; j < N; ++j) {
+        auto [tx, ty] = t[j];
+        ll dx = abs(sx - tx);
+        ll dy = abs(sy - ty);
+        ll d = dx + dy;
+
+        if (d <= lim) {
+          grid[i].push_back(j);
+        }
+      }
+    }
+
+    return match(grid, btoa) == N;
+  };
+
+  ll best = INF;
+  while (lo <= hi) {
+    auto m = (lo + hi) / 2;
+
+    if (check(m)) {
+      hi = m - 1;
+      best = min(best, m);
+    } else {
+      lo = m + 1;
+    }
+  }
+
+  cout << best << '\n';
+}
